@@ -13,6 +13,7 @@ function App() {
   const [films, setFilms] = useState(filmsarray)
   const [selectedGenre, setSelectedGenre] = useState("")
   const [search, setSearch] = useState("")
+
   /*   console.log(search);
     console.log(films); */
 
@@ -40,6 +41,7 @@ function App() {
   }, [search])
 
 
+
   return (
     <>
       <div className="container mt-5">
@@ -50,7 +52,7 @@ function App() {
               onChange={(e) => setSelectedGenre(e.target.value)}
               className="form-select"
               aria-label="Default select example">
-              <option value="Scegli un genere"   >Scegli un genere</option>
+              <option value=""   >Scegli un genere</option>
               {filmsarray.map((thisfilm, index) =>
                 <option key={index}   >{thisfilm.genre}</option>)} {/* GENERAZIONE AUTOMATICA DELLE OPZIONI */}
             </select>
@@ -80,6 +82,22 @@ function App() {
 
           </div>
 
+        </div>
+        <div className="row mt-4">
+          <div className="col-8">
+            <input
+              type="text"
+              className="form-control"
+              name="search"
+              id="search"
+              aria-describedby="helpId"
+              placeholder="Aggiungi un nuovo film"
+            />
+          </div>
+          <div className="col-4">
+
+            <button className="btn btn-primary">Add</button>
+          </div>
         </div>
       </div >
 
