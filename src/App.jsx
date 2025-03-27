@@ -12,25 +12,39 @@ const filmsarray = [
 function App() {
   const [films, setFilms] = useState(filmsarray)
   const [selectedGenre, setSelectedGenre] = useState("")
-  console.log(selectedGenre);
+  const [search, setSearch] = useState("")
+  /*   console.log(search);
+    console.log(films); */
+
   useEffect(() => {
     if (selectedGenre) {
-      const mappedFilms = filmsarray.filter((thisfilm,) =>
+      const filteredFilms = filmsarray.filter((thisfilm,) =>
         selectedGenre === thisfilm.genre
       )
-      console.log(mappedFilms);
-      setFilms(mappedFilms)
+      setFilms(filteredFilms)
     } else {
       setFilms(filmsarray)
     }
   }, [selectedGenre])
+  useEffect(() => {
+    if (search) {
+      const searching = films.filter((thisfilm) =>
+        thisfilm.title.includes(search)
+
+      )
+      console.log(searching);
+      setFilms(searching)
+    } else {
+      setFilms(filmsarray)
+    }
+  }, [search])
+
 
   return (
     <>
       <div className="container mt-5">
-        <div className="row">
+        <div className="row justify-content-between">
           <div className="col-3">
-
             <select
               value={selectedGenre}
               onChange={(e) => setSelectedGenre(e.target.value)}
@@ -40,6 +54,19 @@ function App() {
               {filmsarray.map((thisfilm, index) =>
                 <option key={index}   >{thisfilm.genre}</option>)} {/* GENERAZIONE AUTOMATICA DELLE OPZIONI */}
             </select>
+          </div>
+          <div className="col-3">
+            <input
+              type="text"
+              className="form-control"
+              name="search"
+              id="search"
+              aria-describedby="helpId"
+              placeholder="Cerca il tuo film"
+              value={search}
+              onChange={(e) => { setSearch(e.target.value) }}
+            />
+
           </div>
         </div>
         <div className="row">
