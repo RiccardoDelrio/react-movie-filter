@@ -10,35 +10,51 @@ const filmsarray = [
 
 
 function App() {
-  const [films, setFilms] = useState(filmsarray)
-  const [selectedGenre, setSelectedGenre] = useState("")
-  const [search, setSearch] = useState("")
+  const [film, setFilm] = useState(filmsarray)
+  const [tuttiGeneri, setTuttiGeneri] = useState([])
+  const [genereSelected, setGenereSelected] = useState("0")
+  const [showedFilm, setShowed] = useState([])
+  const [ricerca, setRicerca] = useState("")
 
-  /*   console.log(search);
-    console.log(films); */
+  //Creazione ed assegnazione Del valore a ""tuttiGeneri"
+  useEffect(() => {
+    const generi = []
+    film.forEach((element) => {
+      if (!generi.includes(element.genre)) //controllo per evitare doppioni nei generi
+        generi.push(element.genre)
+    })
+    setTuttiGeneri(generi) //assegno ai generi il valore del nuovo array
+  }, [film]); //trighero in base al cambiamento di film 
 
   useEffect(() => {
-    if (selectedGenre) {
-      const filteredFilms = filmsarray.filter((thisfilm,) =>
-        selectedGenre === thisfilm.genre
-      )
-      setFilms(filteredFilms)
-    } else {
-      setFilms(filmsarray)
-    }
-  }, [selectedGenre])
-  useEffect(() => {
-    if (search) {
-      const searching = films.filter((thisfilm) =>
-        thisfilm.title.includes(search)
+    console.log(genereSelected);
 
-      )
-      console.log(searching);
-      setFilms(searching)
+    if (genereSelected !== "0") {
+      const filterdFilm = film.filter(e => e.genre === genereSelected)
+      console.log(filterdFilm);
+      setShowed(filterdFilm)
+      console.log(genereSelected);
     } else {
-      setFilms(filmsarray)
+      setShowed(film)
+      console.log(genereSelected);
     }
-  }, [search])
+
+  }, [genereSelected])
+
+  useEffect(() => {
+    console.log(ricerca);
+    const filterdFilm = film.filter(e => e.title.toLowerCase().includes(ricerca.toLowerCase()))
+    setShowed(filterdFilm)
+
+  }, [ricerca])
+
+  console.log(tuttiGeneri)
+  console.log(genereSelected);
+  const handleClickGenere = ((e) => {  //funziona per aggiornare il valore del genere selezionato
+    setGenereSelected(e.target.value)
+    console.log(genereSelected);
+  }
+  )
 
 
 
@@ -48,34 +64,37 @@ function App() {
         <div className="row justify-content-between">
           <div className="col-3">
             <select
-              value={selectedGenre}
-              onChange={(e) => setSelectedGenre(e.target.value)}
               className="form-select"
-              aria-label="Default select example">
-              <option value=""   >Scegli un genere</option>
-              {filmsarray.map((thisfilm, index) =>
-                <option key={index}   >{thisfilm.genre}</option>)} {/* GENERAZIONE AUTOMATICA DELLE OPZIONI */}
+              aria-label="Default select example"
+              onChange={(e) => { handleClickGenere(e) }} //ho ripreso il valore dall'elemento selezionato
+            >
+              <option value="0"   >Scegli un genere</option>
+              {tuttiGeneri.map((element, index) =>
+                <option
+                  key={index}
+                  value={element}
+                >{element}</option>
+              )}
             </select>
           </div>
           <div className="col-3">
-            <input
+            <input         //input per la ricerca
               type="text"
               className="form-control"
               name="search"
               id="search"
               aria-describedby="helpId"
               placeholder="Cerca il tuo film"
-              value={search}
-              onChange={(e) => { setSearch(e.target.value) }}
+              value={ricerca}
+              onChange={(e) => { setRicerca(e.target.value) }} //ho ripreso il valore dall'elemento selezionato
             />
-
           </div>
         </div>
         <div className="row">
           <div className="col-12 mt-4">
             <ul className="list-group">
-              {films.map((thisfilm, index) =>
-                <li key={index} className="list-group-item">{thisfilm.title}</li>
+              {showedFilm.map((element, index) =>
+                <li className='list-group-item' key={index}>{element.title}</li>
               )}
 
             </ul>
@@ -83,22 +102,36 @@ function App() {
           </div>
 
         </div>
-        <div className="row mt-4">
-          <div className="col-8">
-            <input
-              type="text"
-              className="form-control"
-              name="search"
-              id="search"
-              aria-describedby="helpId"
-              placeholder="Aggiungi un nuovo film"
-            />
-          </div>
-          <div className="col-4">
+        {/*    <div className="row mt-4">
+          <h3>Aggiungi un nuovo film</h3>
+          <form className='d-flex gap-5'  >
+            <div className="col-8 d-flex gap-1">
+              <input
+                type="text"
+                className="form-control"
+                name="search"
+                id="search"
+                aria-describedby="helpId"
+                placeholder="Titolo film"
 
-            <button className="btn btn-primary">Add</button>
-          </div>
-        </div>
+
+              />
+              <input
+                type="text"
+                className="form-control"
+                name="search"
+                id="search"
+                aria-describedby="helpId"
+                placeholder="Genere film"
+
+              />
+            </div>
+            <div className="col-4">
+
+              <button className="btn btn-primary">Add</button>
+            </div>
+          </form>
+        </div> */}
       </div >
 
     </>
